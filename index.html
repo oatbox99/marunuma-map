@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>丸沼 一枚攻略図(2026・実証版)</title>
+<meta name="description" content="丸沼(群馬県片品村)の釣り攻略図。今日の日付から時期を自動判定し、実釣記録に基づく推奨ポイント・棚・戦術を表示。">
+</head>
+<body>
+<style>
+  :root{
+    --bg:#f6f1e4; --panel:#efe8d6; --panel2:#e9e1cc;
+    --ink:#2a2620; --ink2:#5a5344; --muted:#8a806a;
+    --gold:#a07d1c; --gold-strong:#8a6a14;
+    --line:#d8cfb4; --hair:#cfc5a8;
+    --water0:#cfe0ea; --water1:#8fb3c9; --water2:#4f7a99;
+    --shore:#3e6f96;
+    --series:#2e70a8; --warn:#b0731f;
+    --est:#a3671c; --est-bg:rgba(176,115,31,.10);
+    --ok:#4a7c46;
+    --halo:#f6f1e4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1826; --panel:#102134; --panel2:#0e1d2e;
+      --ink:#e8e3d5; --ink2:#b3ab97; --muted:#7d8698;
+      --gold:#d3ac35; --gold-strong:#e2c05a;
+      --line:#1d304b; --hair:#22364c;
+      --water0:#14293c; --water1:#1d3a54; --water2:#2c567a;
+      --shore:#6ea3c8;
+      --series:#3f87c4; --warn:#b98220;
+      --est:#c98f2e; --est-bg:rgba(185,130,32,.14);
+      --ok:#6fa268;
+      --halo:#0b1826;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b1826; --panel:#102134; --panel2:#0e1d2e;
+    --ink:#e8e3d5; --ink2:#b3ab97; --muted:#7d8698;
+    --gold:#d3ac35; --gold-strong:#e2c05a;
+    --line:#1d304b; --hair:#22364c;
+    --water0:#14293c; --water1:#1d3a54; --water2:#2c567a;
+    --shore:#6ea3c8;
+    --series:#3f87c4; --warn:#b98220;
+    --est:#c98f2e; --est-bg:rgba(185,130,32,.14);
+    --ok:#6fa268;
+    --halo:#0b1826;
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f1e4; --panel:#efe8d6; --panel2:#e9e1cc;
+    --ink:#2a2620; --ink2:#5a5344; --muted:#8a806a;
+    --gold:#a07d1c; --gold-strong:#8a6a14;
+    --line:#d8cfb4; --hair:#cfc5a8;
+    --water0:#cfe0ea; --water1:#8fb3c9; --water2:#4f7a99;
+    --shore:#3e6f96;
+    --series:#2e70a8; --warn:#b0731f;
+    --est:#a3671c; --est-bg:rgba(176,115,31,.10);
+    --ok:#4a7c46;
+    --halo:#f6f1e4;
+  }
+  *{box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:13px; line-height:1.65; margin:0; padding:28px 18px 60px;
+  }
+  .sheet{max-width:1280px; margin:0 auto}
+  .mincho{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+  h1,h2,h3{margin:0; font-weight:600}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* ---------- header ---------- */
+  header{border-bottom:2px solid var(--gold); padding-bottom:14px; margin-bottom:18px}
+  .eyebrow{color:var(--gold); letter-spacing:.35em; text-transform:uppercase; font-size:11px; margin-bottom:6px}
+  h1{font-size:34px; letter-spacing:.06em; text-wrap:balance}
+  h1 .pref{font-size:18px; color:var(--ink2); letter-spacing:.12em}
+  .subtitle{color:var(--ink2); margin-top:6px; max-width:66em}
+  .headmeta{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center}
+  .chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:2px 12px; font-size:12px; color:var(--ink2); background:var(--panel)}
+  .chip b{color:var(--ink); font-weight:600}
+  .legend3{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:12px; color:var(--ink2)}
+  .lg{display:inline-flex; align-items:center; gap:7px}
+  .dot-solid{width:12px;height:12px;border-radius:50%;background:var(--gold);flex:none}
+  .dot-dash{width:12px;height:12px;border-radius:50%;border:2px dashed var(--est);background:var(--est-bg);flex:none}
+  .dot-open{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--muted);flex:none}
+
+  /* ---------- grid ---------- */
+  .maingrid{display:grid; grid-template-columns:288px minmax(0,1fr) 332px; gap:18px; align-items:start}
+  @media (max-width:1080px){ .maingrid{grid-template-columns:1fr 1fr} .mapcol{grid-column:1 / -1; order:-1} }
+  @media (max-width:680px){ .maingrid{grid-template-columns:1fr} }
+
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:14px 16px; margin-bottom:14px}
+  .card h3{font-size:14px; letter-spacing:.08em; display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap}
+  .tag{font-size:10px; letter-spacing:.08em; border-radius:3px; padding:1px 7px; font-weight:600; flex:none}
+  .tag-fix{background:var(--gold); color:var(--bg)}
+  .tag-obs{background:var(--series); color:var(--bg)}
+  .tag-est{border:1px dashed var(--est); color:var(--est); background:var(--est-bg)}
+  .tag-gen{border:1px solid var(--muted); color:var(--muted)}
+  .card ul{margin:0; padding-left:1.2em}
+  .card li{margin:3px 0}
+  .card .src{color:var(--muted); font-size:11px}
+  .kv{width:100%; border-collapse:collapse}
+  .kv td{padding:3px 0; vertical-align:top; border-bottom:1px solid var(--hair)}
+  .kv tr:last-child td{border-bottom:none}
+  .kv td:first-child{color:var(--ink2); width:7.5em; padding-right:8px}
+  .warnnote{color:var(--est); font-size:12px}
+  .oknote{color:var(--ok)}
+
+  /* ---------- map ---------- */
+  .mapcard{background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:10px 12px 6px}
+  .mapcard h2{font-size:16px; letter-spacing:.1em; margin:4px 4px 2px}
+  .mapcard .mapsub{color:var(--ink2); font-size:12px; margin:0 4px 6px}
+  svg{display:block; width:100%; height:auto}
+  svg text{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans",sans-serif}
+  .pointlist{display:grid; grid-template-columns:1fr 1fr; gap:2px 18px; margin-top:10px; font-size:12px}
+  @media (max-width:680px){ .pointlist{grid-template-columns:1fr} }
+  .pt{display:flex; gap:8px; padding:5px 2px; border-bottom:1px solid var(--hair); align-items:baseline}
+  .pt:nth-last-child(-n+2){border-bottom:none}
+  .ptn{flex:none; width:20px; height:20px; border-radius:50%; border:1.6px dashed var(--est); color:var(--est); background:var(--est-bg); display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; transform:translateY(3px)}
+  .ptn.fix{border:none; background:var(--gold); color:var(--bg)}
+  .pt b{color:var(--ink)}
+  .pt .d{color:var(--ink2)}
+  .pt .s{color:var(--muted); font-size:10.5px}
+
+  /* ---------- chart ---------- */
+  .chartwrap{margin-top:4px}
+  .caption{color:var(--muted); font-size:11px; margin-top:6px}
+  details{margin-top:8px; font-size:11.5px}
+  summary{cursor:pointer; color:var(--ink2)}
+  .ttable{width:100%; border-collapse:collapse; margin-top:6px}
+  .ttable th,.ttable td{text-align:left; padding:2px 6px 2px 0; border-bottom:1px solid var(--hair); font-weight:400}
+  .ttable th{color:var(--muted); font-size:10.5px}
+
+  /* ---------- tana ladder ---------- */
+  .tana{display:grid; grid-template-columns:auto 1fr; gap:4px 10px; align-items:center}
+  .tana .tl{font-size:12px; color:var(--ink2); white-space:nowrap}
+  .tbar{position:relative; height:12px; background:var(--panel2); border:1px solid var(--hair); border-radius:3px}
+  .tfill{position:absolute; top:1px; bottom:1px; background:var(--series); border-radius:2px; opacity:.85}
+  .tana .tv{grid-column:2; font-size:11px; color:var(--ink2); margin-top:-3px; margin-bottom:3px}
+
+  /* ---------- bottom bands ---------- */
+  .band{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:14px 18px; margin-top:16px}
+  .band h2{font-size:16px; letter-spacing:.1em; display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap}
+  .cols3{display:grid; grid-template-columns:repeat(3,1fr); gap:8px 22px}
+  .cols2{display:grid; grid-template-columns:repeat(2,1fr); gap:8px 22px}
+  @media (max-width:900px){ .cols3{grid-template-columns:1fr} .cols2{grid-template-columns:1fr} }
+  .step{display:flex; gap:10px; margin:6px 0}
+  .stepn{flex:none; width:22px; height:22px; border-radius:50%; background:var(--gold); color:var(--bg); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:12px; transform:translateY(2px)}
+  .unk{display:flex; flex-wrap:wrap; gap:8px}
+  .unk span{border:1px dashed var(--muted); border-radius:999px; padding:2px 12px; font-size:12px; color:var(--ink2)}
+  .bigtable{width:100%; border-collapse:collapse}
+  .bigtable th{color:var(--muted); font-size:11px; text-align:left; font-weight:600; padding:3px 10px 3px 0; border-bottom:1px solid var(--line)}
+  .bigtable td{padding:3px 10px 3px 0; border-bottom:1px solid var(--hair); vertical-align:top}
+  footer{margin-top:22px; color:var(--muted); font-size:11.5px; border-top:1px solid var(--line); padding-top:12px}
+  footer a{color:var(--gold)}
+  .honest{background:var(--est-bg); border:1px dashed var(--est); border-radius:6px; padding:12px 16px; margin-top:16px; font-size:12.5px}
+  .honest b{color:var(--est)}
+
+  /* ---------- decision hero ---------- */
+  .hero{background:var(--panel); border:1.5px solid var(--gold); border-radius:8px; padding:18px 20px 14px; margin-bottom:18px}
+  .hero h2{font-size:21px; letter-spacing:.08em; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+  .hero .today{color:var(--gold); font-size:13.5px; font-family:inherit}
+  .selrow{display:flex; flex-wrap:wrap; gap:7px; margin:12px 0 2px; align-items:center}
+  .selrow .sl{color:var(--muted); font-size:11px; letter-spacing:.12em; margin-right:4px; flex:none}
+  .pbtn{border:1px solid var(--line); background:var(--panel2); color:var(--ink2); border-radius:999px; padding:4px 13px; font-size:12.5px; cursor:pointer; font-family:inherit; line-height:1.5}
+  .pbtn:hover{border-color:var(--gold)}
+  .pbtn:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+  .pbtn.on{background:var(--gold); color:var(--bg); border-color:var(--gold); font-weight:700}
+  .binnote{color:var(--muted); font-size:11px; margin:4px 0 0}
+  .verdict{display:grid; grid-template-columns:215px 1fr 1.2fr; gap:14px 24px; margin-top:14px}
+  @media (max-width:900px){ .verdict{grid-template-columns:1fr} }
+  .vcell h4{margin:0 0 6px; font-size:11px; letter-spacing:.16em; color:var(--muted); font-weight:600}
+  .tanabig{font-size:29px; font-weight:700; color:var(--series); line-height:1.15}
+  .tananote{color:var(--ink2); font-size:11.5px; margin-top:5px}
+  .vtemps{color:var(--muted); font-size:11px; margin-top:6px}
+  .vpts{display:flex; flex-wrap:wrap; gap:6px}
+  .vpt{border:1.5px dashed var(--est); background:var(--est-bg); color:var(--ink); border-radius:999px; padding:2px 11px; font-size:12px}
+  .vpt b{color:var(--est); font-weight:700}
+  .vsub{color:var(--ink2); font-size:11.5px; margin-top:8px}
+  .vlist{margin:0; padding-left:1.15em; font-size:12.5px}
+  .vlist li{margin:3px 0}
+  .vwarn{color:var(--est); font-size:11.5px; margin-top:6px}
+  .vev{grid-column:1 / -1; border-top:1px dashed var(--hair); padding-top:8px; font-size:11.5px; color:var(--ink2)}
+  .vev b{color:var(--ink)}
+  .windrow{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; border-top:1px solid var(--line); padding-top:12px; align-items:center}
+  .windout{margin-top:8px; font-size:12.5px; background:var(--panel2); border-left:3px solid var(--gold); padding:8px 12px; border-radius:0 4px 4px 0}
+  .windout .we{color:var(--muted); font-size:10.5px; display:block; margin-top:3px}
+  .closed{font-size:14px; color:var(--ink2); margin-top:12px; line-height:1.9}
+  .gocheck{margin-top:14px; font-size:11.5px; color:var(--ink2); border-top:1px solid var(--line); padding-top:10px}
+  .gocheck a{color:var(--gold)}
+  #lakemap g.dim{opacity:.25}
+  #lakemap g.hot circle{fill:var(--gold); stroke:var(--halo); stroke-width:2; stroke-dasharray:none; r:11px; filter:drop-shadow(0 0 5px var(--gold))}
+  #lakemap g.hot text:first-of-type{fill:var(--bg)}
+  #lakemap g.hot text:last-of-type{fill:var(--gold-strong); font-weight:700}
+  .maplegend{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:11px; color:var(--ink2); margin:0 4px 8px; align-items:center}
+  .maplegend .lg{display:inline-flex; align-items:center; gap:6px}
+  .ml-hot{width:14px; height:14px; border-radius:50%; background:var(--gold); box-shadow:0 0 5px var(--gold); flex:none}
+  .ml-dim{width:13px; height:13px; border-radius:50%; border:1.6px dashed var(--est); background:var(--est-bg); opacity:.3; flex:none}
+</style>
+
+<div class="sheet">
+<header>
+  <div class="eyebrow mincho">MARUNUMA FIELD ATLAS ・ 2026</div>
+  <h1 class="mincho">丸沼 一枚攻略図 <span class="pref">— 群馬県利根郡片品村・標高1,428m</span></h1>
+  <p class="subtitle">公式規則・OSM実測地形・釣行記603記事の採掘だけで組んだ、出典明示型の攻略サイト。下のパネルに時期・スタイル・風を入れると<b>「今日どこで釣るか」を実測記録だけから即答</b>し、地図の該当ポイントが点灯する。<b>作らない勇気</b>も仕様: 等深線は公的データが存在しないため描かず、ポイント位置は推定であることを破線で明示する。</p>
+  <div class="headmeta">
+    <span class="chip"><b>遊漁期</b> 4月下旬〜11月末(2026: 4/25特別解禁・4/27一般〜11/30)</span>
+    <span class="chip"><b>最大水深</b> 47.0m(文献)</span>
+    <span class="chip"><b>面積</b> 0.45km²(文献)/0.585km²(OSM汀線実測)</span>
+    <span class="chip"><b>受付</b> 環湖荘 0278-58-2002</span>
+  </div>
+  <div class="legend3">
+    <span class="lg"><span class="dot-solid"></span>確定 — 公式規則・OSM実測・一次記録の逐語</span>
+    <span class="lg"><span class="dot-dash"></span>推定 — 釣行記の相対記述から位置・値を推定(誤差あり)</span>
+    <span class="lg"><span class="dot-open"></span>一般論・二次 — 出典が古い/裏取り1系統のみ</span>
+  </div>
+</header>
+
+<!-- ==================== DECISION HERO ==================== -->
+<div class="hero" id="hero">
+  <h2 class="mincho">今日はどこで釣る? <span class="today" id="todayline"></span></h2>
+  <div class="selrow" id="phasechips"><span class="sl">時期</span></div>
+  <p class="binnote">※時期の区分は2024〜26年の実測記録の分布による便宜的なもの。実際の切替は水温で判断(右列の実測水温チャート参照)。</p>
+  <div class="selrow" id="stylerow"><span class="sl">スタイル</span>
+    <button class="pbtn on" type="button" data-style="boat">ボート</button>
+    <button class="pbtn" type="button" data-style="shore">岸釣り(北半分のみ可)</button>
+  </div>
+  <div id="verdict" aria-live="polite"></div>
+  <div class="windrow" id="windrow"><span class="sl">いまの風・状況は?</span></div>
+  <div class="windout" id="windout" hidden></div>
+  <div class="gocheck"><b>出発前に必ず当日情報を確認</b> — このページは実測アーカイブで、当日の放流・水位・路面・棚は載らない:
+    <a href="https://kankoso.naturum.ne.jp/" rel="noopener">環湖荘ブログ「丸沼釣り日記」</a>(放流・水位・最新釣況)/
+    <a href="https://www.marunuma.com/fishing/" rel="noopener">公式規則・料金</a>/
+    丸沼入り口ライブカメラ(路面・積雪)/受付TEL 0278-58-2002</div>
+</div>
+
+<div class="maingrid">
+
+<!-- ==================== LEFT RAIL ==================== -->
+<div>
+  <div class="card">
+    <h3>基本情報 <span class="tag tag-fix">確定</span></h3>
+    <table class="kv num">
+      <tr><td>所在地</td><td>群馬県利根郡片品村東小川(環湖荘 4658-7)</td></tr>
+      <tr><td>標高</td><td>1,428m(満水時)</td></tr>
+      <tr><td>水深</td><td>最大47.0m・平均31.1m(文献)</td></tr>
+      <tr><td>南北</td><td>約1.35km(OSM実測)</td></tr>
+      <tr><td>魚種</td><td>ニジマス(頂鱒含む)・ブラウン・サクラマス(桜来夢含む)・イワナ・ヤマメ・オショロコマ+ワカサギ</td></tr>
+      <tr><td>いない魚</td><td>レイクトラウト(国内定着は中禅寺湖など)。丸沼=<b>群馬県</b>(栃木県は誤記系統)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>2026年シーズン <span class="tag tag-fix">確定</span></h3>
+    <table class="kv num">
+      <tr><td>金精峠開通</td><td>4/24(金)</td></tr>
+      <tr><td>特別解禁</td><td>4/25(土)・26(日) ルアー・フライ限定/発券 午前4:30〜</td></tr>
+      <tr><td>一般解禁</td><td>4/27(月)〜11/30(月)</td></tr>
+      <tr><td>営業時間</td><td>〜9月末 6:00〜日没/10月〜 6:30〜日没</td></tr>
+      <tr><td>年間大物賞</td><td>4/24〜11/10(ルアー・フライ・餌×魚種別)</td></tr>
+      <tr><td>釣り大会</td><td>年2回(春=5/24実施・参加120名・優勝65.5cm/秋=10月下旬)</td></tr>
+      <tr><td>休業日</td><td>8月にトライアスロン大会で2日間休止(2025実績8/22-23。<span class="warnnote">2026日程は要確認</span>)</td></tr>
+    </table>
+    <div class="src">出典: marunuma.com公式規則+環湖荘ブログ「丸沼釣り日記」告知</div>
+  </div>
+
+  <div class="card">
+    <h3>料金 <span class="tag tag-fix">確定</span></h3>
+    <table class="kv num">
+      <tr><td>入漁料</td><td>大人2,500円/小・中学生1,200円(1日券のみ)</td></tr>
+      <tr><td>貸し舟</td><td>1日: 平日2,900円/土日祝・解禁日3,300円<br>半日(12時〜): 一律2,000円</td></tr>
+      <tr><td>温泉</td><td>入漁券持参500円(通常1,000円)・源泉掛け流し</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>レギュレーション <span class="tag tag-fix">確定</span></h3>
+    <ul>
+      <li>持ち帰り<b>5尾まで</b>・<b>20cm以下リリース</b>(いずれもワカサギは除外)</li>
+      <li>竿は1人2本まで。サビキ・枝針仕掛け・まき餌は禁止</li>
+      <li>ボート持込・エンジン使用は禁止 — 舟釣りは貸し舟のみ。ライフジャケット必須</li>
+      <li><b>沼の奥(南)半分は岸釣り禁止</b>(東京電力私有地・発電施設)</li>
+      <li>バーブレスフック推奨。帰りにクーラーボックス確認あり</li>
+    </ul>
+    <div class="src">出典: marunuma.com/fishing 原文+環湖荘ルールページ</div>
+  </div>
+
+  <div class="card">
+    <h3>ボート運用 <span class="tag tag-obs">実測</span></h3>
+    <ul>
+      <li>約20艘。<b>予約は宿泊者のみ</b>・日帰りは当日先着(環湖荘ブログ2026-04)</li>
+      <li>立ち上がり禁止・ウェーダー着用乗船は非推奨(2025年落水事故後の公式注意)</li>
+      <li class="warnnote">エレキ持込可(Honda 2010記事)+操船に湖川小出力限定2級小型船舶免許(FlyFisher 2015) — いずれも古い二次情報、要現地確認</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>タックル実例 <span class="tag tag-gen">二次</span></h3>
+    <ul>
+      <li><b>ドライ</b>: 8'6"〜9' #4-6/エルクヘア・カディス、パラシュート。ホッパー・ドロッパー(浮力フライの下30cmにニンフ)</li>
+      <li><b>シンキング</b>: 9'前後 #6-8/タイプ2(毎秒約5cm沈下)〜タイプ4(10秒で1m)/リーダー+ティペット全長9〜12ft/マラブー各色</li>
+      <li><b>ルアー</b>: 6ft・2000番・3〜4.5lb/ミノー5-7cm・スプーン5-10g。実績: リップレスミノー、マラブー、蝉ルアー(春ゼミ期)、シンキングペンシル・ジグ(11月)</li>
+    </ul>
+    <div class="src">出典: FlyFisher ONLINE(中峰健児・2015)/Honda釣り倶楽部(2010)/環湖荘ブログ釣果欄</div>
+  </div>
+</div>
+
+<!-- ==================== CENTER: MAP ==================== -->
+<div class="mapcol">
+  <div class="mapcard">
+    <h2 class="mincho">実測地形図 × ポイント推定配置</h2>
+    <p class="mapsub">汀線・縮尺・方位・環湖荘位置=OSM実測(確定)。番号ポイントの位置=釣行記の相対記述からの推定(破線)。</p>
+    <div class="maplegend">
+      <span class="lg"><span class="ml-hot"></span><b>金の丸=いまの推奨エリア</b>(上のパネルで選んだ時期・スタイルに連動して点灯)</span>
+      <span class="lg"><span class="ml-dim"></span>薄い丸=今回の推奨外(ポイント自体は実在)</span>
+      <span class="lg"><span class="dot-dash"></span>破線=位置は記述からの推定</span>
+    </div>
+    <svg id="lakemap" viewBox="0 -80 600 1052" role="img" aria-label="丸沼の実測地形図とポイント配置">
+      <defs>
+        <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--water0)"/>
+          <stop offset="0.45" stop-color="var(--water1)"/>
+          <stop offset="1" stop-color="var(--water2)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- lake body (OSM, 201 pts) -->
+      <path d="M40.0,714.8L42.0,693.0L46.4,688.3L52.3,686.2L59.3,685.1L71.0,682.0L77.6,678.7L81.8,674.0L82.4,670.8L81.7,662.5L87.7,595.0L89.4,586.6L91.3,572.7L103.6,553.6L108.3,546.6L111.3,535.4L112.1,517.2L114.0,498.2L116.0,487.4L119.2,479.7L123.9,477.4L149.9,475.4L151.2,473.9L154.5,472.2L158.7,469.3L164.8,463.3L166.4,459.1L166.5,452.6L171.0,439.3L175.2,429.0L177.0,419.2L176.2,416.0L164.0,398.4L156.2,390.8L139.0,378.2L133.2,368.0L138.7,340.6L140.6,336.6L142.9,334.6L153.3,334.2L157.7,331.2L163.5,324.7L171.0,319.7L174.7,314.8L180.3,302.1L185.0,302.4L188.9,305.1L196.1,304.9L216.0,296.3L219.2,293.6L220.4,290.5L219.0,272.0L217.6,268.8L217.8,256.2L219.2,254.2L227.8,253.2L254.6,245.3L271.4,241.5L277.5,237.3L281.9,231.5L285.4,223.4L289.5,217.0L291.9,209.7L293.7,189.4L295.8,181.5L300.6,173.1L304.0,169.1L313.7,165.9L315.6,164.7L318.3,161.4L326.7,145.5L332.2,133.7L336.0,120.9L335.3,114.2L332.0,107.8L326.1,104.3L324.3,100.9L324.3,93.4L330.3,60.5L331.4,56.3L335.1,49.1L338.0,46.4L346.6,42.9L359.6,39.3L368.6,39.4L376.1,41.3L382.1,43.7L407.3,57.3L417.1,67.9L422.5,71.4L425.4,71.8L427.4,72.9L439.2,74.0L443.4,72.8L446.0,71.2L450.0,66.0L452.1,62.1L462.1,58.1L468.7,57.7L473.8,59.6L483.3,61.1L491.7,62.0L499.5,64.7L505.4,69.9L515.7,83.2L527.0,94.5L540.3,103.1L553.6,107.0L555.6,110.2L556.2,110.8L558.4,117.5L560.0,126.4L557.2,133.3L552.1,142.3L529.0,168.6L526.2,178.9L509.1,198.7L503.9,207.5L500.7,221.5L506.6,241.8L503.4,247.7L503.2,267.7L492.2,282.8L489.0,302.7L480.9,315.1L480.2,355.7L475.5,357.5L472.3,361.7L474.4,376.8L479.8,379.1L484.0,384.7L517.9,385.0L528.7,385.6L529.8,392.4L537.0,398.5L539.3,407.1L544.2,408.0L546.3,418.6L539.3,417.0L539.1,421.3L543.3,426.0L543.3,439.7L540.2,443.1L530.7,441.5L524.0,445.6L518.5,444.9L512.5,462.7L514.9,470.0L507.0,473.1L503.9,485.1L496.0,482.3L486.8,484.2L483.8,479.4L466.7,483.5L457.0,487.8L424.3,497.9L411.9,510.8L410.8,518.9L407.4,521.6L400.6,546.4L402.2,550.0L400.9,556.3L404.0,558.6L407.6,557.4L416.2,558.7L419.4,555.4L434.2,558.4L443.0,557.5L443.9,559.8L441.4,561.6L444.4,567.0L439.9,571.1L439.2,575.6L428.8,583.2L427.5,590.7L418.2,599.7L420.5,605.3L418.7,609.4L407.4,611.6L409.6,616.4L412.4,622.5L404.5,630.1L409.7,636.2L401.5,641.4L406.3,649.3L405.8,666.4L408.1,684.0L368.0,694.2L333.5,709.9L315.0,732.0L265.2,764.5L233.6,803.5L224.8,832.9L215.3,856.9L207.1,860.7L185.7,854.9L134.8,827.1L54.1,765.1L60.6,739.6L54.7,715.7L40.0,714.8Z"
+        fill="url(#water)" stroke="var(--shore)" stroke-width="2"/>
+
+      <!-- R120 (schematic) -->
+      <path d="M8,560 C25,640 5,720 45,800 C60,830 95,872 140,908" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-dasharray="7 5" opacity=".65"/>
+      <text x="10" y="548" font-size="10" fill="var(--muted)">国道120号(経路は概略)</text>
+
+      <!-- north arrow -->
+      <g stroke="var(--ink2)" fill="var(--ink2)">
+        <line x1="46" y1="-16" x2="46" y2="-52" stroke-width="1.5"/>
+        <path d="M46,-58L41,-44L51,-44Z"/>
+        <text x="58" y="-42" font-size="12" stroke="none">N</text>
+      </g>
+
+      <!-- inflow / outflow -->
+      <g stroke="var(--series)" fill="var(--series)">
+        <line x1="352" y1="14" x2="352" y2="34" stroke-width="1.5"/>
+        <path d="M352,40L348,30L356,30Z"/>
+      </g>
+      <text x="360" y="24" font-size="9.5" fill="var(--ink2)">流入(湯沢・推定)</text>
+      <g stroke="var(--series)" fill="var(--series)">
+        <line x1="196" y1="874" x2="188" y2="892" stroke-width="1.5"/>
+        <path d="M185,898L186,887L194,891Z"/>
+      </g>
+      <text x="204" y="888" font-size="9.5" fill="var(--ink2)">流出(大尻沼へ)</text>
+
+      <!-- 環湖荘 (OSM node) -->
+      <rect x="470" y="-24" width="12" height="12" fill="var(--gold)"/>
+      <text x="488" y="-13" font-size="11" font-weight="600" fill="var(--ink)">環湖荘(受付・発券)</text>
+      <text x="488" y="0" font-size="9" fill="var(--muted)">OSM実測位置</text>
+
+      <!-- shore-fishing ban line -->
+      <line x1="150" y1="455" x2="525" y2="455" stroke="var(--est)" stroke-width="2" stroke-dasharray="10 6"/>
+      <g font-size="10.5" fill="var(--est)" text-anchor="middle" paint-order="stroke" stroke="var(--halo)" stroke-width="3">
+        <text x="338" y="473" font-weight="600">これより奥(南)は岸釣り禁止 — 東電私有地</text>
+        <text x="338" y="486" font-size="9">(規則は確定・境界線の位置は概略)</text>
+      </g>
+
+      <!-- zone labels -->
+      <g text-anchor="middle" paint-order="stroke" stroke="var(--halo)" stroke-width="3">
+        <text x="352" y="272" font-size="10.5" fill="var(--ink2)" font-style="italic">北半分: 遠浅・ブレイク/スリット(岸釣りエリア)</text>
+        <text x="285" y="620" font-size="10.5" fill="var(--ink2)" font-style="italic">南半分: 水深20m超・最深47m</text>
+        <text x="285" y="634" font-size="9" fill="var(--muted)">等深線は公的データ非存在のため描かない</text>
+      </g>
+
+      <!-- ===== fixed markers ===== -->
+      <g>
+        <circle cx="207.1" cy="860.7" r="7" fill="var(--gold)" stroke="var(--halo)" stroke-width="2"/>
+        <text x="196" y="884" font-size="10.5" font-weight="600" fill="var(--ink)" text-anchor="end" paint-order="stroke" stroke="var(--halo)" stroke-width="3">丸沼堰堤(1931年・重力式アーチ)</text>
+      </g>
+
+      <!-- ===== estimated markers ===== -->
+      <g font-size="11" font-weight="700">
+        <!-- helper: circle r10 dashed -->
+        <g id="pt1">
+          <circle cx="345" cy="62" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="345" y="66" text-anchor="middle" fill="var(--est)">1</text>
+          <text x="326" y="34" text-anchor="end" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">メインの流れ込み</text>
+        </g>
+        <g id="pt2">
+          <circle cx="432" cy="84" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="432" y="88" text-anchor="middle" fill="var(--est)">2</text>
+          <text x="428" y="108" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">温泉スリット</text>
+        </g>
+        <g id="pt3">
+          <circle cx="474" cy="72" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="474" y="76" text-anchor="middle" fill="var(--est)">3</text>
+          <text x="490" y="86" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">ボート乗り場・湧水</text>
+        </g>
+        <g id="pt4">
+          <circle cx="540" cy="128" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="540" y="132" text-anchor="middle" fill="var(--est)">4</text>
+          <text x="526" y="156" text-anchor="end" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">立ち木の森</text>
+        </g>
+        <g id="pt5">
+          <circle cx="308" cy="196" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="308" y="200" text-anchor="middle" fill="var(--est)">5</text>
+          <text x="290" y="184" text-anchor="end" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">牛舎跡</text>
+        </g>
+        <g id="pt6">
+          <circle cx="160" cy="440" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="160" y="444" text-anchor="middle" fill="var(--est)">6</text>
+          <text x="112" y="428" text-anchor="end" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">タラワンド</text>
+        </g>
+        <g id="pt7">
+          <circle cx="495" cy="440" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="495" y="444" text-anchor="middle" fill="var(--est)">7</text>
+          <text x="530" y="462" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">エラ沢ワンド</text>
+        </g>
+        <g id="pt8">
+          <circle cx="125" cy="542" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="125" y="546" text-anchor="middle" fill="var(--est)">8</text>
+          <text x="100" y="534" text-anchor="end" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">東電放水口</text>
+        </g>
+        <g id="pt9">
+          <circle cx="95" cy="668" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="95" y="672" text-anchor="middle" fill="var(--est)">9</text>
+          <text x="112" y="662" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">国道下</text>
+        </g>
+        <g id="pt10">
+          <circle cx="115" cy="772" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="115" y="776" text-anchor="middle" fill="var(--est)">10</text>
+          <text x="132" y="768" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">毒蛇の岩</text>
+        </g>
+        <g id="pt11">
+          <circle cx="218" cy="812" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="218" y="816" text-anchor="middle" fill="var(--est)">11</text>
+          <text x="242" y="806" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">ダムサイト沖</text>
+        </g>
+        <g id="pt12">
+          <circle cx="320" cy="520" r="10" fill="var(--est-bg)" stroke="var(--est)" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="320" y="524" text-anchor="middle" fill="var(--est)">12</text>
+          <text x="320" y="545" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">ど真ん中</text>
+        </g>
+      </g>
+
+      <!-- locator inset -->
+      <g>
+        <rect x="8" y="128" width="196" height="128" rx="4" fill="var(--panel)" stroke="var(--line)"/>
+        <text x="18" y="146" font-size="10" fill="var(--ink2)" font-weight="600">位置関係(OSM実測)</text>
+        <g transform="translate(14,150) scale(0.545)">
+          <path d="M191.2,110.3L198.2,103.7L204.3,98.5L205.7,91.5L210.7,85.6L217.2,82.2L220.7,76.5L225.3,70.9L231.9,68.2L235.6,64.0L236.9,57.3L237.1,52.2L242.5,50.5L248.5,44.4L251.6,38.1L255.7,38.0L259.1,46.0L261.9,52.5L271.4,54.5L273.5,62.3L274.8,65.7L271.7,70.9L266.0,69.0L263.3,69.7L256.3,76.6L249.9,85.9L252.3,94.4L244.6,98.7L244.6,106.3L247.0,108.8L251.3,102.4L255.3,96.7L261.2,92.5L267.0,96.6L272.8,105.8L278.1,109.4L284.6,103.8L288.7,95.5L296.6,91.9L301.4,93.0L303.6,100.8L305.3,109.5L307.7,115.5L312.3,115.4L318.1,113.9L324.4,115.2L321.6,120.6L321.8,129.3L315.8,132.7L304.1,122.3L287.0,116.9L273.1,110.3L263.4,110.4L254.5,114.2L246.5,111.7L243.2,115.4L239.0,122.5L231.9,124.2L222.7,121.3L218.8,112.6L215.2,107.8L209.3,112.2L204.6,117.6L194.9,113.9L190.8,111.8L191.2,110.3Z" fill="var(--water1)" stroke="var(--shore)" stroke-width="1.4"/>
+          <path d="M71.2,125.9L72.7,122.5L75.7,121.5L76.2,119.6L77.4,108.8L79.8,104.3L80.3,98.6L84.4,97.1L85.5,96.4L86.4,94.4L87.7,90.4L85.2,87.0L83.1,80.9L84.8,80.2L86.9,78.4L88.6,76.4L92.3,75.6L92.7,72.7L92.7,70.6L99.0,69.1L100.7,66.9L101.7,62.8L102.9,60.4L104.6,59.4L106.8,54.6L105.6,52.6L106.1,47.3L107.0,45.6L110.7,44.8L115.3,46.9L117.5,48.7L119.6,48.8L120.7,47.5L123.3,47.2L126.4,47.8L129.7,51.4L133.1,53.3L133.6,55.2L129.9,60.3L126.9,65.0L126.9,69.8L125.1,76.4L123.5,83.0L124.0,85.6L129.9,86.4L131.2,88.9L131.2,90.1L131.6,92.9L129.3,93.6L128.2,96.5L126.0,98.0L122.4,98.1L115.9,101.4L114.5,105.7L114.9,107.1L116.8,106.7L119.7,107.3L119.2,108.6L117.7,111.0L116.7,113.2L115.9,114.8L114.6,117.1L115.4,122.2L104.2,128.0L93.4,140.1L88.7,142.7L73.7,128.9L71.2,125.9Z" fill="var(--water2)" stroke="var(--shore)" stroke-width="1.4"/>
+          <path d="M70.7,123.1L68.6,121.9L69.2,120.2L69.1,117.8L69.0,115.4L68.4,112.5L65.7,113.4L63.0,112.6L59.0,111.4L55.4,113.9L51.1,112.3L48.0,110.6L44.9,111.0L42.3,111.6L41.2,112.6L41.2,117.4L38.5,120.0L37.6,124.3L37.1,125.9L33.9,128.0L32.4,131.3L27.4,132.3L23.8,133.1L20.8,133.6L19.9,131.7L17.7,131.8L16.0,136.5L15.9,141.5L16.1,145.9L19.0,149.1L20.3,156.2L18.9,160.8L19.5,162.4L26.9,162.7L38.0,159.4L40.5,142.7L39.7,134.8L43.8,125.0L51.2,121.9L60.1,123.2L64.9,125.6L67.8,124.4L70.5,124.7Z" fill="var(--water1)" stroke="var(--shore)" stroke-width="1.4"/>
+        </g>
+        <g paint-order="stroke" stroke="var(--panel)" stroke-width="3">
+          <text x="72" y="188" font-size="9" fill="var(--ink)" font-weight="600">丸沼</text>
+          <text x="198" y="196" font-size="9" fill="var(--ink2)" text-anchor="end">菅沼(東)※別漁協</text>
+          <text x="18" y="242" font-size="9" fill="var(--ink2)">大尻沼(南西)※C&amp;R専用</text>
+        </g>
+      </g>
+
+      <!-- scale bar -->
+      <g stroke="var(--ink2)" stroke-width="1.5">
+        <line x1="380" y1="930" x2="532.1" y2="930"/>
+        <line x1="380" y1="924" x2="380" y2="936"/>
+        <line x1="532.1" y1="924" x2="532.1" y2="936"/>
+      </g>
+      <text x="456" y="950" font-size="10" fill="var(--ink2)" text-anchor="middle" class="num">250m</text>
+      <text x="598" y="966" font-size="8.5" fill="var(--muted)" text-anchor="end">地形データ © OpenStreetMap contributors (ODbL)</text>
+    </svg>
+
+    <!-- point legend -->
+    <div class="pointlist">
+      <div class="pt"><span class="ptn">1</span><span><b>メインの流れ込み</b>(湖畔亭裏・牛舎跡沖) <span class="d">— 5月ワカサギ大量接岸で大型集結。61・57cm実績。雨後に「復活」する</span> <span class="s">位置根拠: 北岸=流れ込み+遠浅(FlyFisher明記)</span></span></div>
+      <div class="pt"><span class="ptn">2</span><span><b>温泉スリット</b> <span class="d">— 通年1級。71cm(6月・マラブー)。温泉流入+湧水。夏の岸釣りの軸</span> <span class="s">位置根拠: ボート発着場・温泉施設に隣接との記述</span></span></div>
+      <div class="pt"><span class="ptn">3</span><span><b>ボート乗り場前</b> <span class="d">— 「意外に魚は多い」。船着き場の湧水が9月に復活すると岸釣り好転</span> <span class="s">位置根拠: 環湖荘(OSM確定)直下</span></span></div>
+      <div class="pt"><span class="ptn">4</span><span><b>立ち木の森</b> <span class="d">— 2026年77cm・73cm(ミノー)。4月末〜6月に大型集中</span> <span class="s">位置根拠: 「環湖荘を背にして左」→北東岸と推定</span></span></div>
+      <div class="pt"><span class="ptn">5</span><span><b>牛舎跡</b> <span class="d">— 遠浅シャロー・ウェーダー立ち込み。52cmブラウン(7月)</span> <span class="s">位置根拠: 「立ち木〜牛舎手前のワンド=手前岸際」</span></span></div>
+      <div class="pt"><span class="ptn">6</span><span><b>タラワンド</b> <span class="d">— 岸から入れる中では深い。突端沖で62cm(6月)。ワンド入口を攻める</span> <span class="s">位置根拠: 西岸中部のワンド地形(OSM)に一致と推定</span></span></div>
+      <div class="pt"><span class="ptn">7</span><span><b>エラ沢ワンド</b> <span class="d">— 地形変化・ボトム。解禁日に岩魚47cm。潮目発生時に爆発</span> <span class="s">位置根拠: エラ沢-タラワンド線=湖中央の対岸関係から推定</span></span></div>
+      <div class="pt"><span class="ptn">8</span><span><b>東電放水口</b> <span class="d">— 浅⇔深の境=カケアガリ。発電放水の開始が時合トリガー</span> <span class="s">位置根拠: 航路「タラワンド沖→発電所前→国道下」から西岸南部と推定</span></span></div>
+      <div class="pt"><span class="ptn">9</span><span><b>国道下</b> <span class="d">— 南風の風裏。潮目の終点になりやすい</span> <span class="s">位置根拠: R120最接近部(OSM)の直下と推定</span></span></div>
+      <div class="pt"><span class="ptn">10</span><span><b>毒蛇の岩</b> <span class="d">— オーバーハング虫パターン。74.5cmブラウン(7月・沖)・岩魚53cm</span> <span class="s">位置根拠: 「発電所〜ダムサイト間」の記述から推定</span></span></div>
+      <div class="pt"><span class="ptn">11</span><span><b>ダムサイト沖</b> <span class="d">— ライズ多くフライ向き。北風でゴミ+ライズ。9月は棚深い</span> <span class="s">位置根拠: 堰堤=確定、沖範囲は概略</span></span></div>
+      <div class="pt"><span class="ptn">12</span><span><b>ど真ん中</b> <span class="d">— 夏〜初秋は岸寄りより沖が優位の日が多い。65cmブラウン</span> <span class="s">位置根拠: 名称どおり湖央(定義的)</span></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== RIGHT RAIL ==================== -->
+<div>
+  <div class="card chartwrap">
+    <h3>表層水温 — 実測15点 <span class="tag tag-obs">実測</span></h3>
+    <svg viewBox="0 0 340 232" role="img" aria-label="丸沼の実測表層水温 2024〜2026年 15点">
+      <!-- gridlines -->
+      <g stroke="var(--hair)" stroke-width="1">
+        <line x1="30" y1="196" x2="332" y2="196"/>
+        <line x1="30" y1="152.7" x2="332" y2="152.7"/>
+        <line x1="30" y1="109.3" x2="332" y2="109.3"/>
+        <line x1="30" y1="22.7" x2="332" y2="22.7"/>
+      </g>
+      <g font-size="9" fill="var(--muted)" text-anchor="end" class="num">
+        <text x="26" y="199">5</text><text x="26" y="156">10</text><text x="26" y="112">15</text><text x="26" y="69">20</text><text x="26" y="26">25</text>
+      </g>
+      <text x="4" y="12" font-size="9" fill="var(--muted)">℃</text>
+      <!-- month ticks -->
+      <g font-size="9" fill="var(--muted)" text-anchor="middle">
+        <text x="51" y="212">5月</text><text x="91.7" y="212">6月</text><text x="131.1" y="212">7月</text><text x="171.8" y="212">8月</text><text x="212.5" y="212">9月</text><text x="251.9" y="212">10月</text><text x="292.6" y="212">11月</text>
+      </g>
+      <!-- data gap band -->
+      <rect x="167.9" y="14" width="95.8" height="182" fill="var(--est-bg)"/>
+      <g font-size="8.5" fill="var(--est)" text-anchor="middle">
+        <text x="215.8" y="112">8〜9月: 実測数値の記録なし</text>
+        <text x="215.8" y="124">(定性: 高水温・釣れ棚15m前後)</text>
+      </g>
+      <!-- reference lines -->
+      <g stroke="var(--warn)" stroke-width="1.3" stroke-dasharray="5 4">
+        <line x1="30" y1="66" x2="332" y2="66"/>
+        <line x1="30" y1="48.7" x2="332" y2="48.7"/>
+      </g>
+      <g font-size="8.5" fill="var(--warn)" text-anchor="end">
+        <text x="331" y="45">22℃=躍層顕在化(ken947経験則)</text>
+        <text x="331" y="63">20℃=ドライ不利閾値(FlyFisher)</text>
+      </g>
+      <!-- dots -->
+      <g fill="var(--series)" stroke="var(--halo)" stroke-width="2">
+        <circle cx="43.1" cy="161.3" r="4.5"><title>2026-04-25(特別解禁) 9℃ — 環湖荘ブログ</title></circle>
+        <circle cx="45.8" cy="165.7" r="4.5"><title>2025-04-27 8.5℃ — ken947</title></circle>
+        <circle cx="45.8" cy="152.7" r="4.5"><title>2024-04下旬 10℃ — ken947</title></circle>
+        <circle cx="62.8" cy="135.3" r="4.5"><title>2024-05-10 12℃ — ken947</title></circle>
+        <circle cx="78.6" cy="109.3" r="4.5"><title>2025-05-22 15℃ — ken947</title></circle>
+        <circle cx="104.8" cy="92.0" r="4.5"><title>2026-06-11 約17℃(躍層10mに形成開始) — ken947</title></circle>
+        <circle cx="115.3" cy="53.0" r="4.5"><title>2025-06-19(午後) 21.5℃ — ken947</title></circle>
+        <circle cx="124.5" cy="40.0" r="4.5"><title>2025-06-26 23℃ — ken947</title></circle>
+        <circle cx="129.8" cy="74.7" r="4.5"><title>2026-06-30 19℃ — ken947</title></circle>
+        <circle cx="142.9" cy="44.3" r="4.5"><title>2025-07-10 22.5℃ — ken947</title></circle>
+        <circle cx="152.1" cy="61.7" r="4.5"><title>2025-07-17 20.5℃(前週比-1℃以上) — ken947</title></circle>
+        <circle cx="162.6" cy="31.3" r="4.5"><title>2025-07-25 24℃超(棚15mでヒット) — ken947</title></circle>
+        <circle cx="272.9" cy="92.0" r="4.5"><title>2025-10-17 表層17℃(ドライ復活) — 環湖荘ブログ</title></circle>
+        <circle cx="317.5" cy="148.3" r="4.5"><title>2025-11-20 10.5℃ — ken947</title></circle>
+        <circle cx="326.7" cy="156.1" r="4.5"><title>2025-11-27 9.6℃ — ken947</title></circle>
+      </g>
+      <!-- direct labels -->
+      <g font-size="9" fill="var(--ink2)" paint-order="stroke" stroke="var(--halo)" stroke-width="3">
+        <text x="48" y="180">9℃ 解禁日</text>
+        <text x="124.5" y="29" text-anchor="middle">23℃</text>
+        <text x="167" y="20">24℃+ 7/25</text>
+        <text x="272.9" y="80" text-anchor="middle">17℃ 10/17</text>
+        <text x="322" y="172" text-anchor="end">9.6℃ 11/27</text>
+      </g>
+    </svg>
+    <p class="caption">2024〜2026年の実釣記録から<b>日付つき実測値のみ</b>を転記(年をまたぐ合成のため年差あり)。ChatGPT版のような月別「水温表」は作らない — 存在しない平均値になるため。</p>
+    <details>
+      <summary>実測値一覧(15点)を開く</summary>
+      <table class="ttable num">
+        <tr><th>日付</th><th>水温</th><th>出典</th></tr>
+        <tr><td>2026-04-25</td><td>9℃(ボート乗り場)</td><td>環湖荘ブログ</td></tr>
+        <tr><td>2025-04-27</td><td>8.5℃</td><td>ken947</td></tr>
+        <tr><td>2024-04下旬</td><td>10℃</td><td>ken947</td></tr>
+        <tr><td>2024-05-10</td><td>12℃</td><td>ken947</td></tr>
+        <tr><td>2025-05-22</td><td>15℃</td><td>ken947</td></tr>
+        <tr><td>2026-06-11</td><td>約17℃</td><td>ken947</td></tr>
+        <tr><td>2025-06-19</td><td>21.5℃(午後)</td><td>ken947</td></tr>
+        <tr><td>2025-06-26</td><td>23℃</td><td>ken947</td></tr>
+        <tr><td>2026-06-30</td><td>19℃</td><td>ken947</td></tr>
+        <tr><td>2025-07-10</td><td>22.5℃</td><td>ken947</td></tr>
+        <tr><td>2025-07-17</td><td>20.5℃</td><td>ken947</td></tr>
+        <tr><td>2025-07-25</td><td>24℃超</td><td>ken947</td></tr>
+        <tr><td>2025-10-17</td><td>17℃(表層)</td><td>環湖荘ブログ</td></tr>
+        <tr><td>2025-11-20</td><td>10.5℃</td><td>ken947</td></tr>
+        <tr><td>2025-11-27</td><td>9.6℃</td><td>ken947</td></tr>
+      </table>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>棚(タナ)の季節ラダー <span class="tag tag-obs">実測</span></h3>
+    <div class="tana num">
+      <span class="tl">4月末〜5月上</span><div class="tbar"><div class="tfill" style="left:0%;width:19%"></div></div>
+      <span class="tv">表層〜3m(それ以上沈めるとアタリ消える)</span>
+      <span class="tl">5月中</span><div class="tbar"><div class="tfill" style="left:25%;width:8%"></div></div>
+      <span class="tv">4〜5mが優位の日も(2本竿比較: 表層1匹 vs 4m5匹)</span>
+      <span class="tl">6月</span><div class="tbar"><div class="tfill" style="left:38%;width:25%"></div></div>
+      <span class="tv">躍層形成期 — 17℃で10m付近に形成→19℃なら躍層直上を流す</span>
+      <span class="tl">7月</span><div class="tbar"><div class="tfill" style="left:38%;width:13%"></div></div>
+      <span class="tv">躍層6m前後 → ダウンリガー6〜8m</span>
+      <span class="tl">7月末〜8月</span><div class="tbar"><div class="tfill" style="left:63%;width:31%"></div></div>
+      <span class="tv">10〜15m(水深20m超の場所で。エラ沢-タラワンド線より奥が漁場)</span>
+      <span class="tl">9月上</span><div class="tbar"><div class="tfill" style="left:88%;width:9%"></div></div>
+      <span class="tv">15m前後(トローリングで1人10〜15本の記録)</span>
+      <span class="tl">10月〜</span><div class="tbar"><div class="tfill" style="left:0%;width:100%;opacity:.4"></div></div>
+      <span class="tv">全層等温=「棚」消滅。表層ドライ復活</span>
+    </div>
+    <p class="caption">バー=水面(左端)から16m(右端)。出典: ken947実釣記録+環湖荘ブログ。一般論としては「タナ4〜6mが多い」(masuken)。</p>
+  </div>
+
+  <div class="card">
+    <h3>風と時合 <span class="tag tag-obs">実測</span></h3>
+    <ul>
+      <li><b>無風・鏡面=沈黙</b>。空気が動きゴミが流れ、波が立つと竿が曲がる</li>
+      <li><b>潮目=幅10m前後の移動性1級ポイント</b>。中心に沿って<b>風上へ</b>引く(風下向きはほぼ無魚信)。30分で5ヒットの記録</li>
+      <li>北風→ダムサイト側が風下: ゴミ集積+ライズ発生</li>
+      <li>南風→国道下が風裏(逃げ場)。冷たい北風は実績乏しい</li>
+      <li><b>発電放水の開始=時合</b>(15時放水開始→放水口沖で大型連発の記録)</li>
+      <li>午後の曇天で急に活性が上がった記録あり(6月)</li>
+    </ul>
+    <div class="src">出典: ken947(2024〜2026釣行記)・環湖荘ブログ</div>
+  </div>
+
+  <div class="card">
+    <h3>放流 <span class="tag tag-obs">実測</span></h3>
+    <ul>
+      <li><b>週次の定期放流</b>(金曜・白根魚苑が搬入)。放流1時間後にスリット沖でジャンプ多発の記録</li>
+      <li><b>解禁特別放流</b>=神山水産「頂鱒」+サクラマス新ブランド「桜来夢」(2026-04-23実施)</li>
+      <li><b>大会前特別放流</b>=80cm超×3+70cm超×10+50〜60多数(2026-05-23実施)</li>
+      <li>イワナ放流は約10年なし → 2026年に47cm・53cmが登録され「当たり年」</li>
+      <li>ワカサギはベイトとして放流。春の大量接岸が大型の時合</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>大物実績 2026年(大物賞より抜粋) <span class="tag tag-fix">確定</span></h3>
+    <table class="bigtable num">
+      <tr><th>サイズ</th><th>魚種</th><th>ポイント</th><th>日付・手段</th></tr>
+      <tr><td><b>77cm</b></td><td>ニジマス</td><td>立ち木の森</td><td>5/27 ミノー</td></tr>
+      <tr><td><b>74.5cm</b></td><td>ブラウン</td><td>毒蛇沖</td><td>7/23 フライ(ボート)</td></tr>
+      <tr><td>73cm</td><td>ニジマス</td><td>立ち木周辺</td><td>6/8 リップレスミノー</td></tr>
+      <tr><td>71cm</td><td>ニジマス</td><td>温泉スリット</td><td>6/9 マラブー</td></tr>
+      <tr><td>65cm</td><td>ブラウン</td><td>ど真ん中</td><td>5/27 ルアー</td></tr>
+      <tr><td>62cm</td><td>ニジマス</td><td>タラワンド突端沖</td><td>6/11 ハーリング</td></tr>
+      <tr><td>53cm</td><td>イワナ</td><td>毒蛇周辺</td><td>5/10 ルアー</td></tr>
+      <tr><td>47cm</td><td>イワナ</td><td>エラ沢</td><td>4/27 餌(いくら)</td></tr>
+    </table>
+    <div class="src">出典: 環湖荘ブログ大物賞欄+ken947(62cmのみ)</div>
+  </div>
+</div>
+</div><!-- /maingrid -->
+
+<!-- ==================== BOTTOM BANDS ==================== -->
+<div class="band">
+  <h2 class="mincho">ハーリング(引っ張り)実戦手順 <span class="tag tag-obs">実測 — ken947流(丸沼383記事の筆者)</span></h2>
+  <div class="cols3">
+    <div>
+      <div class="step"><span class="stepn">1</span><span><b>棚は季節ラダーで初期値を決める</b>。魚探があれば躍層(サーモクライン)を探す — 表層22℃超が続くと躍層は6m前後に顕在化</span></div>
+      <div class="step"><span class="stepn">2</span><span><b>船速2.5〜2.8km/h</b>を守る。4km/hに上げるとラインの沈みは1.5m→0.7mに浅くなる(実測)</span></div>
+    </div>
+    <div>
+      <div class="step"><span class="stepn">3</span><span><b>フックは#8が定番</b>。渋い日に#6へ上げても効かず、#8へ戻して釣れた記録が複数</span></div>
+      <div class="step"><span class="stepn">4</span><span><b>潮目ができたら最優先</b>。中心に沿って風上へ引く。風が変わり潮目が蛇行し始めたら魚群ごと消える</span></div>
+    </div>
+    <div>
+      <div class="step"><span class="stepn">5</span><span>ヒットしたら<b>「往復」でなく「往往」</b> — ヒットポイントを迂回して戻り、同じ方向から引き直す</span></div>
+      <div class="step"><span class="stepn">6</span><span>タックル: #7ロッド+シンキングライン。ターンオーバーの兆候=波打ち際の白泡(7月に観測記録)</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="band">
+  <h2 class="mincho">岸釣り <span class="tag tag-obs">実測</span></h2>
+  <div class="cols2">
+    <ul>
+      <li>可能なのは<b>手前(北)半分のみ</b>。巡回ルートの定番: スリット→立ち木→奥(ワンド)</li>
+      <li>水深2m未満の浅場でも<b>水底のスリット(溝)沿い</b>を魚が出入りする — ブレイクライン狙いが基本</li>
+      <li>5月はワカサギ接岸で牛舎〜流れ込み〜立ち木が広範囲に釣れる。ランガン推奨</li>
+    </ul>
+    <ul>
+      <li><b>本番は9月下旬〜</b>(船着き場の湧水復活が合図)、11月上旬で店じまいの記録</li>
+      <li>解禁期は発券所前に早朝から岸釣りの行列ができる日がある</li>
+      <li>フックは#12バーブレス使用例(50cm級にゲイプを伸ばされた記録も)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="band">
+  <h2 class="mincho">位置未特定の実在ポイント <span class="tag tag-gen">実在は確認・位置情報なし</span></h2>
+  <p style="margin:0 0 8px; color:var(--ink2)">以下は釣果記録に繰り返し登場するが、位置を推定できる記述が見つからなかったため<b>地図に描かない</b>(ChatGPT版はここを創作で埋めていた):</p>
+  <div class="unk">
+    <span>マズメ通し — 足元から急ブレイク・ブラウン実績</span>
+    <span>トンビの鼻 — 急深・大型実績</span>
+    <span>カニの鼻 — サクラマス45cm(5月末)</span>
+    <span>浮島 — 水位指標(満水で冠水)・サクラマス43cm</span>
+    <span>お花窪 — 北西風が当たると好転・奥の水深20m帯</span>
+  </div>
+</div>
+
+<div class="band">
+  <h2 class="mincho">アクセス・注意 <span class="tag tag-fix">確定+実測</span></h2>
+  <div class="cols3">
+    <ul>
+      <li>関越道 沼田ICからR120(金精道路)で約50〜90分 <span class="warnnote">※出典間で所要時間に差</span></li>
+      <li>R120は<b>冬季閉鎖(12月下旬〜4月下旬)</b>。金精峠開通日=解禁日</li>
+      <li>11月はスタッドレス/チェーン必須。丸沼入り口のライブカメラで路面確認可</li>
+    </ul>
+    <ul>
+      <li>朝は真夏以外冷える: 5/30朝4℃・9/23朝6℃・11月は氷点下の記録</li>
+      <li>日中27℃の記録あり(2026-07)。<b>湖上に日陰なし</b> — 帽子・水分必須</li>
+      <li>標高1,430m — 平地との気温差10℃以上(環湖荘)</li>
+    </ul>
+    <ul>
+      <li>熊: 2025-10 タラワンド奥遊歩道で目撃情報(被害なし)</li>
+      <li>西隣の<b>大尻沼</b>=ルアー・フライ限定C&amp;R・完全予約制(2026: 5/16〜10/31・8〜17時)</li>
+      <li>東隣の<b>菅沼</b>は別漁協・別ルール(本図の対象外)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="honest">
+  <b>この図が「作らなかった」もの(正直性の宣言)</b> — ①等深線: 国土地理院湖沼調査の対象外で公的データが存在しない(個人が魚探で自作した例は確認したが非公開)。②月別水温表: 実測は単発値のみで平均を作ると創作になる。③8〜9月の水温数値・未特定5ポイントの位置: 記録が見つからないため空欄のまま。④番号ポイントの位置はすべて文章からの推定で、<b>誤差は数百m級がありうる</b>。現地ではボート乗り場での聞き込みが最も確実(その日の棚を早く見つけた者が勝つ湖 — masuken)。
+</div>
+
+<footer>
+  <b>出典</b> — 規則・料金・期間: marunuma.com/fishing(公式)+環湖荘ルールページ/釣況・放流・大物賞・水温: 環湖荘公式ブログ「丸沼釣り日記」(kankoso.naturum.ne.jp)/実測水温・棚・ハーリング・航路: ken947.blog.fc2.com(丸沼釣行383記事)/ポイント名・解説: activel.jp・masuken.info/フライ技術: FlyFisher ONLINE「丸沼のボートフィッシング」(中峰健児=解説・2015年11月号再編集)/タックル・気候: Honda釣り倶楽部(2010)・dan-b.com/地形・面積・距離・位置: © OpenStreetMap contributors(ODbL)による実測。
+  <br>姉妹編: <a href="https://claude.ai/code/artifact/22517ea5-bfe8-4b05-9238-4c4c3d8d53ee">ChatGPT製攻略マップの33項目ファクトチェック(検証編)</a> — 本図はその検証で確定した事実のみで構成。2026-07-28作成・07-29当日判断パネル追加。
+</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var PN={1:'メインの流れ込み',2:'温泉スリット',3:'ボート乗り場前',4:'立ち木の森',5:'牛舎跡',6:'タラワンド',7:'エラ沢ワンド',8:'東電放水口',9:'国道下',10:'毒蛇の岩',11:'ダムサイト沖',12:'ど真ん中'};
+var PHASES=[
+ {id:'off',chip:'冬(禁漁)',from:[12,1],to:[4,24],closed:true,
+  name:'禁漁・冬季閉鎖',
+  msg:'国道120号は冬季閉鎖(例年12月下旬〜4月下旬)。解禁は金精峠開通日で決まる(2026年: 4/24開通→4/25特別解禁・4/27一般解禁)。積雪・路面は丸沼入り口ライブカメラで確認できる。'},
+ {id:'p1',chip:'解禁〜5月上旬',from:[4,25],to:[5,12],
+  name:'ワカサギ接岸・表層の季節',temps:'実測水温 8.5〜12℃(4/25=9・4/27=8.5・5/10=12)',
+  tana:'表層〜3m',tanaNote:'それ以上沈めるとアタリが消える(2026-05-14実測)。2週目以降は4〜5mが優位の日も(2024-05-10: 表層1匹に対し水深4mは5匹)',
+  boatPts:[1,2,4,5,7,10],shorePts:[1,2,4,5],
+  boat:['表層〜3mのハーリング(船速2.5〜2.8km/h)','軸はワカサギ接岸帯=手前岸際アーク(牛舎〜流れ込み〜立ち木)','解禁特別放流(頂鱒・桜来夢)直後で魚は濃い'],
+  shore:['ランガン推奨 —「牛舎〜流れ込み〜立ち木周辺にかけて広範囲で釣れてます」(環湖荘 2026-05-03)','ワカサギ意識: 激しく動かさず表層で漂わせる(2026-05-10スタッフ実釣→約60cmブラウン)','発券所前に早朝から行列の日あり'],
+  records:['岩魚47cm エラ沢(4/27・餌)','ブラウン50cm 流れ込み(5/1・腹はワカサギでパンパン)','ニジ60cm+ブラウン51cm(5/3)','イワナ53cm 毒蛇周辺(5/10・ルアー)'],
+  warn:'朝の冷え込みが強い日は朝一の活性が低い(2026解禁日: 8時3℃で実測)'},
+ {id:'p2',chip:'5月中旬〜6月中旬',from:[5,13],to:[6,20],
+  name:'春ゼミ・大型ラッシュ',temps:'実測水温 15〜21.5℃(5/22=15・6/11≈17・6/19=21.5)',
+  tana:'表層〜4m',tanaNote:'躍層形成前。春ゼミは2026年5/19鳴き始め — 蝉ルアー・ブナムシのトップが有効(美蝉で50cm超ブラウンが「蝉を丸のみ」)',
+  boatPts:[1,2,4,6,7,12],shorePts:[1,2,4,5],
+  boat:['トップ(蝉)とハーリング表層の二本立て','潮目が出たら最優先 — 南風潮目のエラ沢沖で8連発(2025-05-22)','午後の曇天化で急に活性が上がった実測(2026-06-02 ど真ん中でバタバタ)'],
+  shore:['引き続き手前岸際アーク。立ち木は大型の一等地','5月下旬は大会特別放流(80cm超×3+70cm超×10)で大型が入る'],
+  records:['ニジ77cm 立ち木の森(5/27・ミノー)','ブラウン65cm ど真ん中(5/27)','ニジ73cm 立ち木(6/8)・71cm 温泉スリット(6/9・マラブー)','ニジ62cm タラワンド突端沖(6/11・ハーリング)','61+57+53cm 流れ込み沖(5/20)'],
+  warn:'年間最大クラスがこの期間に集中(2026年の上位記録はほぼここ)'},
+ {id:'p3',chip:'6月下旬〜7月中旬',from:[6,21],to:[7,20],
+  name:'躍層(サーモクライン)形成期',temps:'実測水温 19〜23℃(6/26=23・6/30=19・7/10=22.5・7/17=20.5)',
+  tana:'躍層直上〜6-8m',tanaNote:'表層22℃超が続くと躍層が6m前後に顕在化 → ダウンリガー6〜8mで「比較的安定して魚信」(2025-07-03実測)',
+  boatPts:[8,10,11],shorePts:[2,3],
+  boat:['発電所〜ダムサイト間の線上を流す(2025-07-03)','発電放水が始まったら放水口沖合へ(下の状況ボタン参照)','20℃超はドライ不利 — 虫パターンはオーバーハング際(毒蛇の岩)'],
+  shore:['「岸からの方は湧水のポイントやスリット等がねらい目」(環湖荘 2025-07-07)','棚が深めの時期 — 遠投+ボトム意識'],
+  records:['ブラウン56.5cm 毒蛇周辺(6/11・餌)','サクラマス46cm ダムサイト周辺(7/1)','ブラウン52cm 牛舎跡(7/12・フライ)'],
+  warn:'棚設定が全て。魚探があれば躍層の深さを最初に確認'},
+ {id:'p4',chip:'盛夏(7月末〜8月)',from:[7,21],to:[8,31],
+  name:'盛夏 — 深い棚と沖の季節',temps:'実測水温 24℃超(7/25)。8月の数値記録は無し(定性: 高水温)',
+  tana:'10〜15m',tanaNote:'「水深20m以上あるところでの10〜15mの棚が一番魚信がある」(2025-08-02)。棚10mで無反応→15mに下げてヒットの実測(2025-07-25・63cm)',
+  boatPts:[7,8,10,11,12],shorePts:[2,3],
+  boat:['漁場はエラ沢-タラワンドを結ぶ線より奥(南)側(2025-08-02)','岸寄りより真ん中が濃い日が多い(2025-08-30ほか)','潮目(発電所沖〜国道下)で30分5ヒットの実測(2025-08-30)','北西風がお花窪に当たる間は魚信継続の実測(2025-08-06)'],
+  shore:['手前スリット・立ち木で単発ぽつぽつ(2025-08-02)','湧水が枯れる年の岸は我慢 — 9月の湧水復活まで'],
+  records:['ブラウン74.5cm 毒蛇沖(7/23・フライ)','63cm 棚15m(7/25)'],
+  warn:'日中27℃・湖上に日陰なし — 帽子・水分必須。8月はトライアスロンで2日間休業(2026日程は要確認)'},
+ {id:'p5',chip:'9月上〜中旬',from:[9,1],to:[9,25],
+  name:'初秋 — 最深棚の季節',temps:'数値記録なし(定性:「水温はまだまだ高め」2025-09-04)',
+  tana:'15m前後',tanaNote:'「釣れている棚も15メートル前後と深いです」(2025-09-04)。トローリングで1人10〜15本の記録あり',
+  boatPts:[1,2,11,12],shorePts:[1,2,3],
+  boat:['ダムサイト周辺が軸(9/9サクラマス49cm・9/15ニジ64cm=棚かなり深く)','流れ込み沖=冷たい水が入るボトムへ遠投(2025-09-07)'],
+  shore:['船着き場の湧水が復活したら岸釣り本番開始の合図(2025-09-26実測)','温泉スリットで見えマスの実測(2025-09-07)'],
+  records:['ニジ64cm ダムサイト(9/15・アワビ系スプーン)','岸のスリットで6匹+55cm(9/26)'],
+  warn:'水位はトライアスロン後に回復途上の年あり'},
+ {id:'p6',chip:'9月末〜10月',from:[9,26],to:[10,31],
+  name:'秋 — 棚消滅・表層復活',temps:'実測水温 表層17℃(10/17)',
+  tana:'棚なし(全層)',tanaNote:'10月に入ると水深20mでも表層とほぼ等温=「棚」が消滅(2025-09-19)。表層ドライ・蝉トップまで復活(2025-10-17)',
+  boatPts:[2,9,10,11],shorePts:[1,2],
+  boat:['ダムサイト〜国道下、毒蛇沖周辺(2025-10-17: 1人10匹=蝉トップ3+ミノー2+スプーン5)','ワカサギ釣りも本格化 — 底ベタの群れの直上をトラウトが回る'],
+  shore:['岸釣りのベストシーズン(スリット軸・2025-09-26に6匹+55cm)','ドライフライも「より期待できる」時期(FlyFisher)'],
+  records:['10/17: 1人10匹(大美蝉トップ含む)','秋の釣り大会(10月下旬)+大会前特別放流'],
+  warn:'熊: 2025-10-24 タラワンド奥の遊歩道で目撃情報。単独行動注意'},
+ {id:'p7',chip:'11月',from:[11,1],to:[11,30],
+  name:'晩秋 — シンペン・ジグの季節',temps:'実測水温 10.5℃(11/20)→9.6℃(11/27)',
+  tana:'全層(巻き物)',tanaNote:'「この時期はやはりシンペン・ジグ等強いですね」(2025-11-06)。カメムシパターンの言及もあり',
+  boatPts:[1,4],shorePts:[1,2],
+  boat:['立ち木沖など(2025-11-02: 50cmニジ・パニッシュ)','雨後は流れ込みが復活し魚が入る'],
+  shore:['流れ込み周辺=手前ブレイクに魚が寄る(2025-11-02 連休好釣果)','産卵遡上ペアは河川内ではそっと見守る(公式の呼びかけ)','岸釣りは11月上旬で店じまいの記録'],
+  records:['50cm超ニジ 流れ込み(11/6・サージャー)','水温9.6℃でも釣果継続(11/27)'],
+  warn:'路面凍結・降雪 — スタッドレス必須。路面次第で定期放流が止まる(2025-11-25)'}
+];
+var WINDS=[
+ {id:'calm',label:'無風・鏡面',advice:'期待薄の時間帯。移動を繰り返すより「待ち」— 朝7時ごろ空気が動いて湖面のゴミが流れ出すとアタリが出始め、波が立つと竿が曲がる、が実測パターン。午後の曇天化で急変した例もある。',ev:'ken947釣行記/環湖荘2026-06-02'},
+ {id:'shift',label:'風が出た・変わった',advice:'時合の合図。まず湖面に潮目(帯状の筋)が出ていないか探す。風向転換の直後に風表となった流れ込み沖へ移動して61cmの実測例(南風転換・2026-05-20)。',ev:'ken947 2026-05-20ほか'},
+ {id:'seam',label:'潮目が見えた',advice:'最優先で直行。幅10m前後の潮目の中心に沿って「風上に向けて」引く — 風下向きはほぼ無魚信。潮目が蛇行し始めたら魚群ごと消えるので時間勝負(30分で5ヒットの実測)。',ev:'ken947 2025-05-22/2025-08-30'},
+ {id:'north',label:'北風',advice:'風下のダムサイト方面にゴミが集まりライズ発生(5月実測)。ただし強い北風は波が高く危険 — 手前中心に切替(6月実測)。「冷たい北の風の中でよく釣れたという記憶はない」と筆者明言。',ev:'ken947 2025-05-22/2026-06-04'},
+ {id:'south',label:'南風',advice:'国道下が風裏=低速航行(ハーリング)の逃げ場。南風で出来た潮目(エラ沢沖)で爆釣の実測。',ev:'ken947 2025-05-15/2025-05-22'},
+ {id:'disc',label:'発電放水が始まった',advice:'放水口沖合周辺へ。15時の放水開始から良型連発・70cm弱を筆頭に大型3連発の実測。「放水の後はサイズ、数を問わず好釣果」。',ev:'ken947 2025-08-18/2024-05-10・activel'}
+];
+var state={phase:null,style:'boat'};
+var qs=new URLSearchParams(location.search);
+
+function inRange(m,d,from,to){
+  var v=m*100+d, a=from[0]*100+from[1], b=to[0]*100+to[1];
+  return a<=b ? (v>=a&&v<=b) : (v>=a||v<=b);
+}
+function phaseForToday(){
+  var now=new Date(), m=now.getMonth()+1, d=now.getDate();
+  for(var i=0;i<PHASES.length;i++){ if(inRange(m,d,PHASES[i].from,PHASES[i].to)) return PHASES[i]; }
+  return PHASES[0];
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function li(a){return a.map(function(x){return '<li>'+esc(x)+'</li>';}).join('');}
+
+function render(){
+  var p=state.phase;
+  document.querySelectorAll('#phasechips .pbtn').forEach(function(b){b.classList.toggle('on',b.dataset.phase===p.id);});
+  document.querySelectorAll('#stylerow .pbtn').forEach(function(b){b.classList.toggle('on',b.dataset.style===state.style);});
+  var v=document.getElementById('verdict');
+  if(p.closed){
+    v.innerHTML='<p class="closed"><b>'+esc(p.name)+'</b> — '+esc(p.msg)+'</p>';
+    highlight([]);
+    return;
+  }
+  var pts=state.style==='boat'?p.boatPts:p.shorePts;
+  var tac=state.style==='boat'?p.boat:p.shore;
+  var chips=pts.map(function(n){return '<span class="vpt"><b>'+n+'</b> '+esc(PN[n])+'</span>';}).join('');
+  var shoreNote=state.style==='shore'
+    ?'<p class="vsub">岸で立てるのは北(手前)半分のみ — 奥半分は東京電力私有地で岸釣り禁止。</p>'
+    :'<p class="vsub">位置は釣行記の記述からの推定(地図の点灯マーカー参照)。当日の正解はボート乗り場での聞き込みが最速。</p>';
+  v.innerHTML=
+   '<div class="vcell"><h4>棚(タナ)</h4><div class="tanabig">'+esc(p.tana)+'</div><p class="tananote">'+esc(p.tanaNote)+'</p><p class="vtemps num">'+esc(p.temps)+'</p></div>'+
+   '<div class="vcell"><h4>有望エリア — '+esc(p.name)+'</h4><div class="vpts">'+chips+'</div>'+shoreNote+'</div>'+
+   '<div class="vcell"><h4>戦術('+(state.style==='boat'?'ボート':'岸')+')</h4><ul class="vlist">'+li(tac)+'</ul>'+(p.warn?'<p class="vwarn">⚠ '+esc(p.warn)+'</p>':'')+'</div>'+
+   '<div class="vev"><b>この時期の実測記録:</b> '+p.records.map(esc).join(' / ')+'</div>';
+  highlight(pts);
+}
+function highlight(pts){
+  for(var i=1;i<=12;i++){
+    var g=document.getElementById('pt'+i);
+    if(!g) continue;
+    g.classList.remove('hot','dim');
+    if(pts.length){ g.classList.add(pts.indexOf(i)>=0?'hot':'dim'); }
+  }
+}
+var chipsRow=document.getElementById('phasechips');
+PHASES.forEach(function(p){
+  var b=document.createElement('button');
+  b.type='button'; b.className='pbtn'; b.dataset.phase=p.id; b.textContent=p.chip;
+  b.addEventListener('click',function(){state.phase=p;render();});
+  chipsRow.appendChild(b);
+});
+document.querySelectorAll('#stylerow .pbtn').forEach(function(b){
+  b.addEventListener('click',function(){state.style=b.dataset.style;render();});
+});
+var wr=document.getElementById('windrow'), wo=document.getElementById('windout');
+WINDS.forEach(function(w){
+  var b=document.createElement('button');
+  b.type='button'; b.className='pbtn'; b.dataset.wind=w.id; b.textContent=w.label;
+  b.addEventListener('click',function(){
+    document.querySelectorAll('#windrow .pbtn').forEach(function(x){x.classList.toggle('on',x===b);});
+    wo.hidden=false;
+    wo.innerHTML='<b>'+esc(w.label)+'</b> → '+esc(w.advice)+'<span class="we">出典: '+esc(w.ev)+'</span>';
+  });
+  wr.appendChild(b);
+});
+var qp=qs.get('phase');
+if(qs.get('style')==='shore') state.style='shore';
+var forced=null;
+if(qp){ PHASES.forEach(function(p){ if(p.id===qp) forced=p; }); }
+state.phase=forced||phaseForToday();
+var now=new Date();
+var wd=['日','月','火','水','木','金','土'][now.getDay()];
+document.getElementById('todayline').textContent='— 今日は'+(now.getMonth()+1)+'月'+now.getDate()+'日('+wd+')。自動判定: '+state.phase.name;
+render();
+})();
+</script>
+
+</body>
+</html>
