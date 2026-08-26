@@ -78,8 +78,16 @@
   .headmeta{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center}
   .chip{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:2px 12px; font-size:12px; color:var(--ink2); background:var(--panel)}
   .chip b{color:var(--ink); font-weight:600}
-  a.chip-link{text-decoration:none; border-color:var(--gold); color:var(--gold-strong); font-weight:600}
-  a.chip-link:hover{background:var(--gold); color:var(--bg)}
+  .lakenav{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:14px}
+  .ln-label{font-size:12.5px; font-weight:700; color:var(--gold-strong); letter-spacing:.14em}
+  .ln-tabs{display:inline-flex; border:1.5px solid var(--gold); border-radius:8px; overflow:hidden; background:var(--panel)}
+  .ln-tab{display:inline-flex; align-items:center; padding:7px 18px; font-size:14px; font-weight:700; letter-spacing:.08em}
+  .ln-tab + .ln-tab{border-left:1.5px solid var(--gold)}
+  a.ln-tab{color:var(--gold-strong); text-decoration:underline; text-underline-offset:3px}
+  a.ln-tab:hover{background:var(--gold); color:var(--bg)}
+  a.ln-tab:focus-visible{outline:2px solid var(--gold-strong); outline-offset:-2px}
+  .ln-on{background:var(--gold); color:var(--bg); cursor:default}
+  .ln-now{font-size:10px; font-weight:600; border:1px solid currentColor; border-radius:3px; padding:0 5px; margin-left:7px; letter-spacing:.08em}
   .legend3{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; font-size:12px; color:var(--ink2)}
   .lg{display:inline-flex; align-items:center; gap:7px}
   .dot-solid{width:12px;height:12px;border-radius:50%;background:var(--gold);flex:none}
@@ -205,12 +213,18 @@
   <div class="eyebrow mincho">MARUNUMA FIELD ATLAS ・ 2026</div>
   <h1 class="mincho">丸沼 一枚攻略図 <span class="pref">— 群馬県利根郡片品村・標高1,428m</span></h1>
   <p class="subtitle">公式規則・OSM実測地形・釣行記603記事の採掘だけで組んだ、出典明示型の攻略サイト。下のパネルに時期・スタイル・風を入れると<b>「今日どこで釣るか」を実測記録だけから即答</b>し、地図の該当ポイントが点灯する。<b>作らない勇気</b>も仕様: 等深線は公的データが存在しないため描かず、ポイント位置は推定であることを破線で明示する。</p>
+  <nav class="lakenav" aria-label="姉妹編マップの切替">
+    <span class="ln-label">⇄ 姉妹編</span>
+    <div class="ln-tabs">
+      <span class="ln-tab ln-on" aria-current="page">丸沼<span class="ln-now">表示中</span></span>
+      <a class="ln-tab" href="https://oatbox99.github.io/sugenuma-map/" title="菅沼 一枚攻略図へ移動">菅沼</a>
+    </div>
+  </nav>
   <div class="headmeta">
     <span class="chip"><b>遊漁期</b> 4月下旬〜11月末(2026: 4/25特別解禁・4/27一般〜11/30)</span>
     <span class="chip"><b>最大水深</b> 47.0m(文献)</span>
     <span class="chip"><b>面積</b> 0.45km²(文献)/0.585km²(OSM汀線実測)</span>
     <span class="chip"><b>受付</b> 環湖荘 0278-58-2002</span>
-    <a class="chip chip-link" href="https://oatbox99.github.io/sugenuma-map/">⇄ 姉妹編: 菅沼 一枚攻略図へ</a>
   </div>
   <div class="legend3">
     <span class="lg"><span class="dot-solid"></span>確定 — 公式規則・OSM実測・一次記録の逐語</span>
