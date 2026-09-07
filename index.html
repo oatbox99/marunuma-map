@@ -27,8 +27,8 @@
 <style>
   :root{
     --bg:#f6f1e4; --panel:#efe8d6; --panel2:#e9e1cc;
-    --ink:#2a2620; --ink2:#5a5344; --muted:#8a806a;
-    --gold:#a07d1c; --gold-strong:#8a6a14;
+    --ink:#2a2620; --ink2:#5a5344; --muted:#706656;
+    --gold:#a07d1c; --gold-strong:#826310;
     --line:#d8cfb4; --hair:#cfc5a8;
     --water0:#cfe0ea; --water1:#8fb3c9; --water2:#4f7a99;
     --shore:#3e6f96;
@@ -47,7 +47,7 @@
       --shore:#6ea3c8;
       --series:#3f87c4; --warn:#b98220;
       --est:#c98f2e; --est-ink:#c98f2e; --est-bg:rgba(185,130,32,.14);
-      --ok:#6fa268; --ng:#c06a55; --ng-bg:rgba(192,106,85,.12);
+      --ok:#6fa268; --ng:#d4826c; --ng-bg:rgba(212,130,108,.12);
       --halo:#0b1826;
     }
   }
@@ -60,13 +60,13 @@
     --shore:#6ea3c8;
     --series:#3f87c4; --warn:#b98220;
     --est:#c98f2e; --est-ink:#c98f2e; --est-bg:rgba(185,130,32,.14);
-    --ok:#6fa268; --ng:#c06a55; --ng-bg:rgba(192,106,85,.12);
+    --ok:#6fa268; --ng:#d4826c; --ng-bg:rgba(212,130,108,.12);
     --halo:#0b1826;
   }
   :root[data-theme="light"]{
     --bg:#f6f1e4; --panel:#efe8d6; --panel2:#e9e1cc;
-    --ink:#2a2620; --ink2:#5a5344; --muted:#8a806a;
-    --gold:#a07d1c; --gold-strong:#8a6a14;
+    --ink:#2a2620; --ink2:#5a5344; --muted:#706656;
+    --gold:#a07d1c; --gold-strong:#826310;
     --line:#d8cfb4; --hair:#cfc5a8;
     --water0:#cfe0ea; --water1:#8fb3c9; --water2:#4f7a99;
     --shore:#3e6f96;
@@ -109,7 +109,7 @@
   /* ln-status */
   .ln-dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; border:1.5px solid var(--muted); box-sizing:border-box; flex:none; vertical-align:middle}
   .ln-dot.st-open{background:var(--ok); border-color:var(--ok)}
-  .ln-dot.st-rest{background:var(--ng); border-color:var(--ng)}
+  .ln-dot.st-rest{background:var(--ng,#9c4433); border-color:var(--ng,#9c4433)}
   .ln-dot.st-sub{background:var(--gold); border-color:var(--gold-strong)}
   .ln-dot.st-off{background:transparent}
   .ln-on .ln-dot.st-off{border-color:var(--bg)}
@@ -117,7 +117,7 @@
   .ln-today:empty{display:none}
   .ln-today b{color:var(--ink)}
   .ln-st{white-space:nowrap; margin-right:8px; font-weight:600}
-  .ln-st.st-open{color:var(--ok)} .ln-st.st-rest{color:var(--ng)} .ln-st.st-sub{color:var(--gold-strong)} .ln-st.st-off{color:var(--muted)}
+  .ln-st.st-open{color:var(--ok)} .ln-st.st-rest{color:var(--ng,#9c4433)} .ln-st.st-sub{color:var(--gold-strong)} .ln-st.st-off{color:var(--muted)}
   .ln-note{color:var(--muted); font-weight:400}
   @media (max-width:600px){
     .ln-tabs{border:none; background:none; overflow:visible; gap:6px}
@@ -254,7 +254,7 @@
   /* PRINT v1 */
   @media print{
     @page{size:A4; margin:9mm}
-    :root,:root[data-theme="dark"],:root[data-theme="light"]{ color-scheme:light; --bg:#f6f1e4; --panel:#efe8d6; --panel2:#e9e1cc; --ink:#2a2620; --ink2:#5a5344; --muted:#8a806a; --gold:#a07d1c; --gold-strong:#8a6a14; --line:#d8cfb4; --hair:#cfc5a8; --water0:#cfe0ea; --water1:#8fb3c9; --water2:#4f7a99; --shore:#3e6f96; --series:#2e70a8; --warn:#b0731f; --est:#a3671c; --est-ink:#8a5416; --est-bg:rgba(176,115,31,.10); --ok:#447240; --ng:#9c4433; --ng-bg:rgba(156,68,51,.08); --halo:#f6f1e4; }
+    :root,:root[data-theme="dark"],:root[data-theme="light"]{ color-scheme:light; --bg:#f6f1e4; --panel:#efe8d6; --panel2:#e9e1cc; --ink:#2a2620; --ink2:#5a5344; --muted:#706656; --gold:#a07d1c; --gold-strong:#826310; --line:#d8cfb4; --hair:#cfc5a8; --water0:#cfe0ea; --water1:#8fb3c9; --water2:#4f7a99; --shore:#3e6f96; --series:#2e70a8; --warn:#b0731f; --est:#a3671c; --est-ink:#8a5416; --est-bg:rgba(176,115,31,.10); --ok:#447240; --ng:#9c4433; --ng-bg:rgba(156,68,51,.08); --halo:#f6f1e4; }
     html,body{background:#fff !important}
     body{font-size:11.5px}
     .lakenav,.ln-today,.gocheck a[href]:after{display:none !important}
@@ -283,7 +283,8 @@
     </div>
     <p class="ln-today" id="ln-today"></p>
   </nav>
-  <script>/* LAKENAV-STATUS v1 */
+  <script>/* JST-TODAY v1 */function TODAY(){var n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()+540)*60000);}</script>
+<script>/* LAKENAV-STATUS v1 */
 (function(){
   /* 5湖の当日可否。各ページの SEASONS/OPEN と同じ 2026年日程(年次更新は5ページ同時に行う。navtest.sh で全日一致を検証) */
   var Y=2026;
@@ -312,7 +313,7 @@
   }
   function render(){
     if(typeof document==='undefined'||!document.querySelectorAll) return;
-    var now=new Date(), y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate();
+    var now=TODAY(), y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate();
     var wd=['日','月','火','水','木','金','土'];
     var line=document.getElementById('ln-today');
     var tabs=document.querySelectorAll('.ln-tab[data-lake]');
@@ -341,6 +342,7 @@
   render();
 })();
 </script>
+<script>/* DAY-ROLLOVER v1 */(function(){var d0=TODAY().toDateString();function chk(){if(TODAY().toDateString()!==d0)location.reload();}window.addEventListener('pageshow',chk);document.addEventListener('visibilitychange',function(){if(!document.hidden)chk();});})();</script>
   <div class="headmeta">
     <span class="chip"><b>2026シーズン</b> 4/25-26特別解禁・4/27一般解禁〜11/30(例年4月下旬〜11月末)</span>
     <span class="chip"><b>釣法</b> ルアー・フライ・餌/ボート+岸(北半分のみ)・竿は1人2本</span>
@@ -608,7 +610,7 @@
         <text x="249.2" y="279" font-size="10" fill="var(--ink2)" text-anchor="middle">5km</text>
       </g>
       <text x="10" y="326" font-size="13" fill="var(--muted)">大尻沼=同一管理者(環湖荘)・C&amp;R専用</text>
-      <text x="10" y="342" font-size="13" fill="var(--muted)">菅沼=別漁協・別ルール</text>
+      <text x="10" y="342" font-size="13" fill="var(--muted)">菅沼=別管理者・別ルール</text>
     </g>
       </g>
 
@@ -859,7 +861,7 @@
     <ul>
       <li>熊: 2025-10 タラワンド奥遊歩道で目撃情報(被害なし)</li>
       <li>西隣の<b>大尻沼</b>=ボート専用(岸釣り全面禁止)・ルアー・フライ限定C&amp;R・完全予約制・<b>隔年営業</b>(偶数年は5月中旬〜10月末のシーズン通し、奇数年は5〜6月の土日限定の特別解禁のみ — 隔年パターンは推定・公式未発表、詳細は大尻沼編)(2026: 5/16〜10/31・8〜17時)</li>
-      <li>東隣の<b>菅沼</b>は別漁協・別ルール(本図の対象外)</li>
+      <li>東隣の<b>菅沼</b>は別管理者(菅沼キャンプ村 0278-58-2958)・別ルール(本図の対象外)</li>
     </ul>
   </div>
 </div>
@@ -871,7 +873,7 @@
 <footer>
   <b>出典</b> — 規則・料金・期間: marunuma.com/fishing(公式)+環湖荘ルールページ/釣況・放流・大物賞・水温: 環湖荘公式ブログ「丸沼釣り日記」(kankoso.naturum.ne.jp)/実測水温・棚・ハーリング・航路: ken947.blog.fc2.com(丸沼釣行383記事)/ポイント名・解説: activel.jp・masuken.info/フライ技術: FlyFisher ONLINE「丸沼のボートフィッシング」(中峰健児=解説・2015年11月号再編集)/タックル・気候: Honda釣り倶楽部(2010)・dan-b.com/道路: 群馬県道路管理課(冬季閉鎖)・栃木県 道路規制情報(栃木側ゲート規制)/地形・面積・距離・位置: © OpenStreetMap contributors(ODbL)による実測。
   <br>姉妹編(5湖): <a href="https://oatbox99.github.io/ojirinuma-map/" rel="noopener">大尻沼 一枚攻略図</a> / <a href="https://oatbox99.github.io/sugenuma-map/" rel="noopener">菅沼 一枚攻略図</a> / <a href="https://oatbox99.github.io/yunoko-map/" rel="noopener">湯ノ湖 一枚攻略図</a> / <a href="https://oatbox99.github.io/chuzenjiko-map/" rel="noopener">中禅寺湖 一枚攻略図</a>(2026-09-05 追加)。<br>検証編: ChatGPT製攻略マップの33項目ファクトチェック(2026-07-28)を経て確定した事実のみで構成(検証記録は非公開)。2026-07-28作成・07-29当日判断パネル追加。
-  <br><b>最終確認 2026-09-07</b>(公式ページの再取得は2026-09-05〜07・5湖相互リンクの HTTP 200 確認)。<b>本図は公式規則の代替ではない — 出発前に必ず公式サイト・電話で当日情報を確認すること。</b>
+  <br><b>最終確認 2026-09-07</b>(公式ページの再取得 2026-09-05〜07、5湖相互リンクの HTTP 200 確認)。<b>本図は公式規則の代替ではない — 出発前に必ず公式サイト・電話で当日情報を確認すること。</b>
 </footer>
 </div>
 
@@ -893,7 +895,7 @@ function seasonFor(y,m,d){
 function isOpen(y,m,d){ return !!seasonFor(y,m,d); }
 function renderOpenState(){
   var el=document.getElementById('openstate'); if(!el) return;
-  var now=new Date(), y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate();
+  var now=TODAY(), y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate();
   var wd=['日','月','火','水','木','金','土'];
   var tail='<p class="nextopen">当日の可否(放流・水位・臨時休業)は環湖荘 <b>0278-58-2002</b> か <a href="https://kankoso.naturum.ne.jp/" rel="noopener" style="color:var(--gold)">丸沼釣り日記</a> で確認。</p>';
   if(y!==YEAR){
@@ -993,11 +995,11 @@ function inRange(m,d,from,to){
   return a<=b ? (v>=a&&v<=b) : (v>=a||v<=b);
 }
 function phaseForToday(){
-  var now=new Date(), m=now.getMonth()+1, d=now.getDate();
+  var now=TODAY(), m=now.getMonth()+1, d=now.getDate();
   for(var i=0;i<PHASES.length;i++){ if(inRange(m,d,PHASES[i].from,PHASES[i].to)) return PHASES[i]; }
   return PHASES[0];
 }
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function li(a){return a.map(function(x){return '<li>'+esc(x)+'</li>';}).join('');}
 
 function render(){
@@ -1057,7 +1059,7 @@ if(qs.get('style')==='shore') state.style='shore';
 var forced=null;
 if(qp){ PHASES.forEach(function(p){ if(p.id===qp) forced=p; }); }
 state.phase=forced||phaseForToday();
-var now=new Date();
+var now=TODAY();
 var wd=['日','月','火','水','木','金','土'][now.getDay()];
 document.getElementById('todayline').textContent='— 今日は'+(now.getMonth()+1)+'月'+now.getDate()+'日('+wd+')。'+(forced?'表示中(手動選択): ':(now.getFullYear()===YEAR?'自動判定: ':YEAR+'年の時期区分を参考表示: '))+state.phase.name;
 renderOpenState();
